@@ -36,6 +36,4 @@ jobs:
 
       - name: Ansible Lint
         uses: ansible/ansible-lint@v6
-        with:
-          args: "-c .ansible-lint.yml"
 ...
