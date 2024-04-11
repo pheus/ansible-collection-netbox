@@ -1,0 +1,28 @@
+---
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+  - repo: "https://github.com/pre-commit/pre-commit-hooks"
+    rev: "v4.5.0"
+    hooks:
+      - id: check-merge-conflict
+      - id: check-symlinks
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-yaml
+        files: \.(yaml|yml)$
+      - id: check-added-large-files
+      - id: no-commit-to-branch
+
+  - repo: "https://github.com/adrienverge/yamllint.git"
+    rev: "v1.35.1"
+    hooks:
+      - id: yamllint
+        files: \.(yaml|yml)$
+
+  - repo: "https://github.com/ansible-community/ansible-lint.git"
+    rev: "v6.22.2"
+    hooks:
+      - id: ansible-lint
+        files: \.(yaml|yml)$
+...

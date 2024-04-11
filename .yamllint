@@ -1,0 +1,54 @@
+---
+
+extends: default
+
+rules:
+  document-end: enable
+  document-start:
+    level: error
+  empty-values: enable
+  float-values:
+    require-numeral-before-decimal: true
+  indentation:
+    spaces: 2
+  octal-values: enable
+
+  quoted-strings:
+    quote-type: double
+    required: only-when-needed
+    extra-required:
+      # Jinja template
+      - "{{"
+      # Jinja template
+      - "{%"
+      # file paths
+      - "^(\\/[^\\/]+)+\\/?$"
+      # URL scheme (e.g. https://)
+      - "^([a-z][a-z0-9+\\-.]*):"
+    extra-allowed:
+      # regex
+      - "^"
+      # email address
+      - "@"
+      # IPv4 address
+      - |
+          (?x)^(
+              (25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}
+          $
+      # IPv6 address
+      - |
+          (?x)^(
+              ?!^(?:(?:.*(?:::.*::|:::).*)|::|[0:]+[01]|
+              .*[^:]:|[0-9a-fA-F](?:.*:.*){8}[0-9a-fA-F]|
+              (?:[0-9a-fA-F]:){1,6}[0-9a-fA-F])$)^(?:(::|
+              [0-9a-fA-F]{1,4}:{1,2})([0-9a-fA-F]{1,4}:{1,2}){0,6}
+              ([0-9a-fA-F]{1,4}|::)?
+          )$
+      # MAC address
+      - "^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$"
+    allow-quoted-quotes: false
+
+  truthy:
+    allowed-values: ["true", "false"]
+    level: error
+...

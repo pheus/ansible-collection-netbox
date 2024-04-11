@@ -1,0 +1,25 @@
+---
+namespace: "pheus"
+name: "netbox"
+version: 0.0.1
+readme: README.md
+authors:
+  - Martin Hauser <git@pheus.dev>
+
+description: NetBox installation and configuration based on installation guide
+license_file: LICENSE
+tags:
+  - datacenter
+  - dcim
+  - ipam
+  - netbox
+  - networking
+dependencies: {}
+
+repository: "https://github.com/pheus/ansible-collection-netbox"
+issues: "https://github.com/pheus/ansible-collection-netbox/issues"
+
+build_ignore:
+  - .gitignore
+  - changelogs/.plugin-cache.yaml
+...
