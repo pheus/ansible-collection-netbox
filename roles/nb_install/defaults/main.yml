@@ -42,4 +42,10 @@ nb_install_database_user_name: netbox
 nb_install_database_user_password: "{{ lookup('ansible.builtin.password',
   '/dev/null', length=32, seed=inventory_hostname) }}"
 
+
+# NetBox housekeeping configuration
+###################################
+
+# Housekeeping cron job file name (in /etc/cron.daily/)
+nb_install_netbox_housekeeping_cron_job_file: netbox-housekeeping.sh
 ...

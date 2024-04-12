@@ -64,4 +64,12 @@
     mode: "0600"
     backup: true
 
+- name: netbox | Ensure daily housekeeping cron job is configured
+  become: true
+  ansible.builtin.template:
+    src: netbox-housekeeping.sh.j2
+    dest: "/etc/cron.daily/{{ nb_install_netbox_housekeeping_cron_job_file }}"
+    group: root
+    owner: root
+    mode: "0755"
 ...
