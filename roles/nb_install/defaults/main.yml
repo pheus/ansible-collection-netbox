@@ -1,4 +1,17 @@
 ---
 # defaults file for Ansible role pheus.netbox.nb_install
 
+# NetBox database configuration
+###############################
+
+# Database name
+nb_install_database_name: netbox
+
+# Database user name
+nb_install_database_user_name: netbox
+
+# Database user password
+nb_install_database_user_password: "{{ lookup('ansible.builtin.password',
+  '/dev/null', seed=inventory_hostname) }}"
+
 ...
