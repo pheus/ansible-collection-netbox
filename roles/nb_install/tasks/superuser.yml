@@ -1,0 +1,28 @@
+---
+# tasks file for NetBox superuser creation
+
+# Flush the Ansible handlers to enforce the execution of the upgrade script
+# before the creation of the superuser.
+- name: superuser | Ensure handlers are executed
+  ansible.builtin.meta:
+    flush_handlers
+
+- name: superuser | Create an initial NetBox admin (superuser)
+  become: true
+  community.general.django_manage:
+    command: >-
+      createsuperuser --noinput
+      --username={{ nb_install_netbox_superuser_username }}
+      --email={{ nb_install_netbox_superuser_email }}
+    project_path: "{{ nb_install_netbox_install_path }}/netbox"
+    virtualenv: "{{ nb_install_netbox_install_path }}/venv"
+  environment:
+    DJANGO_SUPERUSER_PASSWORD: "{{ nb_install_netbox_superuser_password }}"
+  when: >
+    nb_install_netbox_superuser_creation_enabled | bool
+    and __nb_install_database_create_result is defined
+    and __nb_install_database_create_result.changed | bool
+    and 'CREATE DATABASE' in
+    __nb_install_database_create_result.executed_commands[0]
+
+...

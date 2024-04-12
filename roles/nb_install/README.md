@@ -6,7 +6,7 @@ Installs and configures [NetBox](https://github.com/netbox-community/netbox) as 
 
 The role requires the following Ansible collections to be available:
 
-  - community.django
+  - community.general
   - community.postgres
 
 Additionally NetBox has some requirements for the targeting host:

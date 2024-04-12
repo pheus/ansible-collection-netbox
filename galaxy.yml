@@ -14,7 +14,9 @@ tags:
   - ipam
   - netbox
   - networking
-dependencies: {}
+dependencies:
+  "community.general": "*"
+  "community.postgresql": "*"
 
 repository: "https://github.com/pheus/ansible-collection-netbox"
 issues: "https://github.com/pheus/ansible-collection-netbox/issues"

@@ -19,6 +19,18 @@ nb_install_netbox_secret_key: "{{ lookup('ansible.builtin.password',
   '/dev/null', chars=['ascii_letters', 'digits', '!@#$%^&*(-_=+)'],
   length=50, seed=inventory_hostname) }}"
 
+# NetBox (Django) superuser creation enabled
+nb_install_netbox_superuser_creation_enabled: true
+
+# NetBox superuser username
+nb_install_netbox_superuser_username: admin
+
+# NetBox superuser user email address
+nb_install_netbox_superuser_email: "admin@example.org"
+
+# NetBox superuser password
+# nb_install_netbox_superuser_password: "ADD A SUPERUSER PASSWORD"
+
 # NetBox system user
 nb_install_netbox_system_user: netbox
 

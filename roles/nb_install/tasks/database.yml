@@ -32,6 +32,7 @@
     name: "{{ nb_install_database_name }}"
     owner: "{{ nb_install_database_user_name }}"
     state: present
+  register: __nb_install_database_create_result
   notify: netbox-upgrade-script
 
 - name: database | Verify database user can connect to database
