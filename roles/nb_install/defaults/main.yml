@@ -25,7 +25,7 @@ nb_install_netbox_system_user: netbox
 # NetBox time zone
 nb_install_netbox_time_zone: UTC
 
-# NetBox installation version
+# NetBox installation version (e.g. v3.7.5, default: master branch)
 nb_install_netbox_version: latest
 
 

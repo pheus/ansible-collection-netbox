@@ -39,6 +39,7 @@
     single_branch: true
     version: "{{ 'master' if nb_install_netbox_version == 'latest'
       else nb_install_netbox_version }}"
+  notify: netbox-upgrade-script
 
 - name: netbox | Change ownership of media, reports, scripts directories
   become: true
