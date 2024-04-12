@@ -1,4 +1,8 @@
 ---
 # main tasks file for Ansible role pheus.netbox.nb_install
 
+- name: Include PostgreSQL database installation and preparation tasks
+  ansible.builtin.include_tasks:
+    file: database.yml
+
 ...

@@ -1,0 +1,14 @@
+---
+# tasks file for PostgreSQL database installation and preparation
+
+- name: database | Ensure PostgreSQL database package is installed
+  become: true
+  ansible.builtin.apt:
+    pkg:
+      - postgresql>=11
+      - libpq-dev
+      - python3-psycopg2
+    state: present
+    update_cache: true
+
+...
