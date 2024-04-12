@@ -53,5 +53,14 @@
     - reports
     - scripts
 
+- name: netbox | Create NetBox configuration file from template
+  become: true
+  ansible.builtin.template:
+    src: netbox_configuration.py.j2
+    dest: "{{ nb_install_netbox_install_path }}/netbox/netbox/configuration.py"
+    group: "{{ nb_install_netbox_system_user }}"
+    owner: "{{ nb_install_netbox_system_user }}"
+    mode: "0600"
+    backup: true
 
 ...
