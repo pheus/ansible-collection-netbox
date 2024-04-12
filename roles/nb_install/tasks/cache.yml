@@ -1,0 +1,21 @@
+---
+# tasks file for Redis caching server installation
+
+- name: cache | Ensure Redis caching server package is installed
+  become: true
+  ansible.builtin.apt:
+    pkg:
+      - redis-server>=4
+    state: present
+    update_cache: true
+
+- name: cache | Verify Redis service is functional
+  ansible.builtin.command:
+    cmd: "redis-cli ping"
+  changed_when: false
+  failed_when:
+    - "__nb_install_cache_redis_cli_result.rc != 0"
+    - "'PONG' not in __nb_install_cache_redis_cli_result.stdout"
+  register: __nb_install_cache_redis_cli_result
+
+...

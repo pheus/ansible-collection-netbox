@@ -5,4 +5,8 @@
   ansible.builtin.include_tasks:
     file: database.yml
 
+- name: Include Redis caching server installation tasks
+  ansible.builtin.include_tasks:
+    file: cache.yml
+
 ...
