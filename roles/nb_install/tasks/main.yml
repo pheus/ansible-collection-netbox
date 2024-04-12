@@ -1,6 +1,19 @@
 ---
 # main tasks file for Ansible role pheus.netbox.nb_install
 
+- name: Ensure superuser (admin) password is provided
+  ansible.builtin.assert:
+    that:
+      - nb_install_netbox_superuser_password is defined
+      - nb_install_netbox_superuser_password | length > 0
+    fail_msg: |
+      The initial superuser (admin) account for NetBox requires a password.
+
+      Please set an password via "nb_isntall_netbox_superuser_password"
+      or disable the creation of the superuser via
+      "nb_install_netbox_superuser_creation_enabled".
+  when: nb_install_netbox_superuser_creation_enabled | bool
+
 - name: Include PostgreSQL database installation and preparation tasks
   ansible.builtin.include_tasks:
     file: database.yml
@@ -12,5 +25,10 @@
 - name: Include NetBox instance installation tasks
   ansible.builtin.include_tasks:
     file: netbox.yml
+
+- name: Include NetBox superuser installation tasks
+  ansible.builtin.include_tasks:
+    file: superuser.yml
+  when: nb_install_netbox_superuser_creation_enabled | bool
 
 ...
