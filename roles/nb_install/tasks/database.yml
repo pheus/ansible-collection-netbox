@@ -1,0 +1,45 @@
+---
+# tasks file for PostgreSQL database installation and preparation
+
+- name: database | Ensure PostgreSQL database package is installed
+  become: true
+  ansible.builtin.apt:
+    pkg:
+      - postgresql>=11
+      - libpq-dev
+      - python3-psycopg2
+    state: present
+    update_cache: true
+
+- name: database | Create a NetBox database, if it does not exist
+  become: true
+  become_user: postgres
+  vars:
+    ansible_ssh_pipelining: true
+  community.postgresql.postgresql_db:
+    encoding: UTF-8
+    name: "{{ nb_install_database_name }}"
+    state: present
+
+- name: database | Add a NetBox database user
+  become: true
+  become_user: postgres
+  vars:
+    ansible_ssh_pipelining: true
+  community.postgresql.postgresql_user:
+    comment: NetBox database user
+    db: "{{ nb_install_database_name }}"
+    name: "{{ nb_install_database_user_name }}"
+    password: "{{ nb_install_database_user_password }}"
+    state: present
+
+- name: database | Verify database user can connect to database
+  community.postgresql.postgresql_db:
+    encoding: UTF-8
+    login_host: localhost
+    login_user: "{{ nb_install_database_user_name }}"
+    login_password: "{{ nb_install_database_user_password }}"
+    name: "{{ nb_install_database_name }}"
+    state: present
+
+...
