@@ -1,6 +1,18 @@
 ---
 # defaults file for Ansible role pheus.netbox.nb_install
 
+# NetBox configuration
+######################
+
+# NetBox installation path (and home of nb_install_netbox_system_user)
+nb_install_netbox_install_path: "/opt/netbox"
+
+# NetBox installation version
+nb_install_netbox_version: latest
+
+# NetBox system user
+nb_install_netbox_system_user: netbox
+
 # NetBox database configuration
 ###############################
 

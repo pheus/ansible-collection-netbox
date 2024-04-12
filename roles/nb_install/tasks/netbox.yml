@@ -20,4 +20,33 @@
     state: present
     update_cache: true
 
+- name: netbox | Create a NetBox system user
+  become: true
+  ansible.builtin.user:
+    comment: NetBox daemon user
+    create_home: false
+    home: "{{ nb_install_netbox_install_path }}"
+    name: "{{ nb_install_netbox_system_user }}"
+    shell: "/usr/sbin/nologin"
+    system: true
+
+- name: netbox | Clone NetBox git repository to system user's home
+  become: true
+  ansible.builtin.git:
+    depth: 1
+    dest: "{{ nb_install_netbox_install_path }}"
+    repo: "https://github.com/netbox-community/netbox.git"
+    single_branch: true
+    version: "{{ 'master' if nb_install_netbox_version == 'latest'
+      else nb_install_netbox_version }}"
+
+- name: netbox | Recursively change ownership of system user's home
+  become: true
+  ansible.builtin.file:
+    path: "{{ nb_install_netbox_install_path }}"
+    owner: "{{ nb_install_netbox_system_user }}"
+    group: "{{ nb_install_netbox_system_user }}"
+    state: directory
+    recurse: true
+
 ...
