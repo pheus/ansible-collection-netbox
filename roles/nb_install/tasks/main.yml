@@ -9,4 +9,8 @@
   ansible.builtin.include_tasks:
     file: cache.yml
 
+- name: Include NetBox instance installation tasks
+  ansible.builtin.include_tasks:
+    file: netbox.yml
+
 ...

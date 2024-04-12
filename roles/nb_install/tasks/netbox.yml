@@ -1,0 +1,75 @@
+---
+# tasks file for NetBox instance installation and upgrade
+
+- name: netbox | Ensure NetBox dependencies are installed
+  become: true
+  ansible.builtin.apt:
+    pkg:
+      - build-essential
+      - git
+      - libxml2-dev
+      - libxslt1-dev
+      - libffi-dev
+      - libpq-dev
+      - libssl-dev
+      - python3>=3.8
+      - python3-dev
+      - python3-pip
+      - python3-venv
+      - zlib1g-dev
+    state: present
+    update_cache: true
+
+- name: netbox | Create a NetBox system user
+  become: true
+  ansible.builtin.user:
+    comment: NetBox daemon user
+    create_home: false
+    home: "{{ nb_install_netbox_install_path }}"
+    name: "{{ nb_install_netbox_system_user }}"
+    shell: "/usr/sbin/nologin"
+    system: true
+
+- name: netbox | Clone NetBox git repository to system user's home
+  become: true
+  ansible.builtin.git:
+    depth: 1
+    dest: "{{ nb_install_netbox_install_path }}"
+    repo: "https://github.com/netbox-community/netbox.git"
+    single_branch: true
+    version: "{{ 'master' if nb_install_netbox_version == 'latest'
+      else nb_install_netbox_version }}"
+  notify: netbox-upgrade-script
+
+- name: netbox | Change ownership of media, reports, scripts directories
+  become: true
+  ansible.builtin.file:
+    path: "{{ nb_install_netbox_install_path }}/netbox/{{ item }}"
+    owner: "{{ nb_install_netbox_system_user }}"
+    group: "{{ nb_install_netbox_system_user }}"
+    state: directory
+    recurse: true
+  loop:
+    - media
+    - reports
+    - scripts
+
+- name: netbox | Create NetBox configuration file from template
+  become: true
+  ansible.builtin.template:
+    src: netbox_configuration.py.j2
+    dest: "{{ nb_install_netbox_install_path }}/netbox/netbox/configuration.py"
+    group: "{{ nb_install_netbox_system_user }}"
+    owner: "{{ nb_install_netbox_system_user }}"
+    mode: "0600"
+    backup: true
+
+- name: netbox | Ensure daily housekeeping cron job is configured
+  become: true
+  ansible.builtin.template:
+    src: netbox-housekeeping.sh.j2
+    dest: "/etc/cron.daily/{{ nb_install_netbox_housekeeping_cron_job_file }}"
+    group: root
+    owner: root
+    mode: "0755"
+...
