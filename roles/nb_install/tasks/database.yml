@@ -33,4 +33,13 @@
     password: "{{ nb_install_database_user_password }}"
     state: present
 
+- name: database | Verify database user can connect to database
+  community.postgresql.postgresql_db:
+    encoding: UTF-8
+    login_host: localhost
+    login_user: "{{ nb_install_database_user_name }}"
+    login_password: "{{ nb_install_database_user_password }}"
+    name: "{{ nb_install_database_name }}"
+    state: present
+
 ...
