@@ -40,13 +40,18 @@
     version: "{{ 'master' if nb_install_netbox_version == 'latest'
       else nb_install_netbox_version }}"
 
-- name: netbox | Recursively change ownership of system user's home
+- name: netbox | Change ownership of media, reports, scripts directories
   become: true
   ansible.builtin.file:
-    path: "{{ nb_install_netbox_install_path }}"
+    path: "{{ nb_install_netbox_install_path }}/netbox/{{ item }}"
     owner: "{{ nb_install_netbox_system_user }}"
     group: "{{ nb_install_netbox_system_user }}"
     state: directory
     recurse: true
+  loop:
+    - media
+    - reports
+    - scripts
+
 
 ...
