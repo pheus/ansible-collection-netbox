@@ -14,4 +14,16 @@
   listen: netbox-upgrade-script
   register: __nb_install_upgrade_result
 
+- name: Ensure NetBox services are restarted
+  become: true
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    daemon_reload: true
+    enabled: true
+    state: restarted
+  listen: netbox-services-restart
+  loop:
+    - netbox
+    - netbox-rq
+
 ...

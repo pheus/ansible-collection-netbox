@@ -1,0 +1,34 @@
+---
+# tasks file for WSGI application server installation and configuration
+
+- name: application | Create Gunicorn WSGI configuration file from template
+  become: true
+  ansible.builtin.template:
+    src: gunicorn.py.j2
+    dest: "{{ nb_install_netbox_install_path }}/gunicorn.py"
+    group: "{{ nb_install_netbox_system_user }}"
+    owner: "{{ nb_install_netbox_system_user }}"
+    mode: "0644"
+    backup: true
+  notify: netbox-services-restart
+
+- name: application | Ensure Gunicorn WSGI systemd service file exists
+  become: true
+  ansible.builtin.template:
+    src: netbox.service.j2
+    dest: "/etc/systemd/system/netbox.service"
+    group: root
+    owner: root
+    mode: "0755"
+  notify: netbox-services-restart
+
+- name: application | Create NetBox Request Queue Worker systemd service file
+  become: true
+  ansible.builtin.template:
+    src: netbox-rq.service.j2
+    dest: "/etc/systemd/system/netbox-rq.service"
+    group: root
+    owner: root
+    mode: "0755"
+  notify: netbox-services-restart
+...

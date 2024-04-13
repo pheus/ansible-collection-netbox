@@ -30,7 +30,7 @@
     shell: "/usr/sbin/nologin"
     system: true
 
-- name: netbox | Clone NetBox git repository to system user's home
+- name: netbox | Clone NetBox git repository to installation directory
   become: true
   ansible.builtin.git:
     depth: 1
@@ -39,7 +39,9 @@
     single_branch: true
     version: "{{ 'master' if nb_install_netbox_version == 'latest'
       else nb_install_netbox_version }}"
-  notify: netbox-upgrade-script
+  notify:
+    - netbox-upgrade-script
+    - netbox-services-restart
 
 - name: netbox | Change ownership of media, reports, scripts directories
   become: true
