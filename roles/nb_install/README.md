@@ -9,7 +9,7 @@ The role requires the following Ansible collections to be available:
   - community.general
   - community.postgres
 
-Additionally NetBox has some requirements for the targeting host:
+NetBox has some requirements for the targeting host:
 
   - Operating Systems:
     - 20.04 (focal)
@@ -21,6 +21,15 @@ Additionally NetBox has some requirements for the targeting host:
   - Redis caching server:
     - 4.0 or higher
 
+Additionally the provided Nginx configuration assumes a TLS certificate (including the private key).
+A simple self-signed certificate can be generated with the following
+command (executed on the targeting host):
+
+```bash
+sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+-keyout /etc/ssl/private/netbox.key \
+-out /etc/ssl/certs/netbox.crt
+```
 
 ## Role Variables
 
