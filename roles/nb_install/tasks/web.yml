@@ -9,4 +9,14 @@
     state: present
     update_cache: true
 
+- name: web | Create Nginx HTTP configuration file from template
+  become: true
+  ansible.builtin.template:
+    src: nginx.conf.j2
+    dest: "/etc/nginx/sites-available/netbox"
+    group: "{{ nb_install_netbox_system_user }}"
+    owner: "{{ nb_install_netbox_system_user }}"
+    mode: "0644"
+    backup: true
+
 ...
