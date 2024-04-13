@@ -26,6 +26,10 @@
   ansible.builtin.include_tasks:
     file: netbox.yml
 
+- name: Include Gunicorn WSGI application server installation tasks
+  ansible.builtin.include_tasks:
+    file: application.yml
+
 - name: Include NetBox superuser installation tasks
   ansible.builtin.include_tasks:
     file: superuser.yml
