@@ -1,0 +1,12 @@
+---
+# tasks file for Nginx web server installation and configuration
+
+- name: web | Ensure Nginx server package is installed
+  become: true
+  ansible.builtin.apt:
+    pkg:
+      - nginx
+    state: present
+    update_cache: true
+
+...
