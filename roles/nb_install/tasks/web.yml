@@ -18,5 +18,21 @@
     owner: "{{ nb_install_netbox_system_user }}"
     mode: "0644"
     backup: true
+  notify: nginx-service-restart
+
+- name: web | Ensure Nginx default configuration is disabled
+  become: true
+  ansible.builtin.file:
+    path: "/etc/nginx/sites-enabled/default"
+    state: absent
+  notify: nginx-service-restart
+
+- name: web | Enable NetBox Nginx configuration
+  become: true
+  ansible.builtin.file:
+    path: "/etc/nginx/sites-enabled/netbox"
+    src: "/etc/nginx/sites-available/netbox"
+    state: link
+  notify: nginx-service-restart
 
 ...
