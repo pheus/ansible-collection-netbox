@@ -1,0 +1,68 @@
+---
+# tasks file for Nginx web server installation and configuration
+
+- name: web | Ensure Nginx server package is installed
+  become: true
+  ansible.builtin.apt:
+    pkg:
+      - nginx
+    state: present
+    update_cache: true
+
+- name: web | Create Nginx HTTP configuration file from template
+  become: true
+  ansible.builtin.template:
+    src: nginx.conf.j2
+    dest: "/etc/nginx/sites-available/netbox"
+    group: "{{ nb_install_netbox_system_user }}"
+    owner: "{{ nb_install_netbox_system_user }}"
+    mode: "0644"
+    backup: true
+  notify: nginx-service-restart
+
+- name: web | Check if the TLS certificate file exists
+  become: true
+  ansible.builtin.stat:
+    path: "{{ nb_install_web_server_tls_cert_path }}"
+  register: __nb_install_web_server_tls_cert_stat_result
+
+- name: web | Check if the TLS certificate key exists
+  become: true
+  ansible.builtin.stat:
+    path: "{{ nb_install_web_server_tls_cert_key_path }}"
+  register: __nb_install_web_server_tls_cert_key_stat_result
+
+- name: web | Ensure TLS certificates and key file exist
+  ansible.builtin.assert:
+    that:
+      - __nb_install_web_server_tls_cert_stat_result.stat.exists
+      - __nb_install_web_server_tls_cert_key_stat_result.stat.exists
+    fail_msg: |
+      The Nginx web server configuration requires a TLS certificate.
+
+      Please provide a valid certificate at the following location:
+      Certificate file: {{ nb_install_web_server_tls_cert_path }}
+      Certificate key: {{ nb_install_web_server_tls_cert_key_path }}
+
+      A simple self-signed certificate can be generated with the following
+      command (executed on {{ inventory_hostname }}):
+        sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+        -keyout {{ nb_install_web_server_tls_cert_key_path }} \
+        -out {{ nb_install_web_server_tls_cert_path }}
+
+- name: web | Ensure Nginx default configuration is disabled
+  become: true
+  ansible.builtin.file:
+    path: "/etc/nginx/sites-enabled/default"
+    state: absent
+  notify: nginx-service-restart
+
+- name: web | Enable NetBox Nginx configuration
+  become: true
+  ansible.builtin.file:
+    path: "/etc/nginx/sites-enabled/netbox"
+    src: "/etc/nginx/sites-available/netbox"
+    state: link
+  notify: nginx-service-restart
+
+...

@@ -1,0 +1,28 @@
+server {
+    listen [::]:443 ssl ipv6only=off;
+
+    server_name {{ nb_install_web_server_domain }};
+
+    ssl_certificate {{ nb_install_web_server_tls_cert_path }};
+    ssl_certificate_key {{ nb_install_web_server_tls_cert_key_path }};
+
+    client_max_body_size 25m;
+
+    location /static/ {
+        alias {{ nb_install_netbox_install_path }}/netbox/static/;
+    }
+
+    location / {
+        proxy_pass http://127.0.0.1:8001;
+        proxy_set_header X-Forwarded-Host $http_host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+
+server {
+    # Redirect HTTP traffic to HTTPS
+    listen [::]:80 ipv6only=off;
+    server_name {{ nb_install_web_server_domain }};
+    return 301 https://$host$request_uri;
+}

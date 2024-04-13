@@ -30,6 +30,10 @@
   ansible.builtin.include_tasks:
     file: application.yml
 
+- name: Include Nginx web server installation tasks
+  ansible.builtin.include_tasks:
+    file: web.yml
+
 - name: Include NetBox superuser installation tasks
   ansible.builtin.include_tasks:
     file: superuser.yml

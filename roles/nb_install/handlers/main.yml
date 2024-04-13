@@ -26,4 +26,11 @@
     - netbox
     - netbox-rq
 
+- name: Restart Nginx service after configuration change
+  become: true
+  ansible.builtin.systemd:
+    name: nginx
+    state: restarted
+  listen: nginx-service-restart
+
 ...

@@ -7,7 +7,11 @@
 # NetBox allowed host list of fully-qualified domain names (FQDNs) for
 # the NetBox server (wildcard '*' allows all host values)
 nb_install_netbox_allowed_hosts:
-  - "*"
+  - "{{ nb_install_netbox_domain if not '_' else '*' }}"
+
+# NetBox web service fully-qualified domain name (FQDN)
+# (e.g. netbox.example.org)
+nb_install_netbox_domain: "_"
 
 # NetBox installation path (and home of nb_install_netbox_system_user)
 nb_install_netbox_install_path: "/opt/netbox"
@@ -60,4 +64,18 @@ nb_install_database_user_password: "{{ lookup('ansible.builtin.password',
 
 # Housekeeping cron job file name (in /etc/cron.daily/)
 nb_install_netbox_housekeeping_cron_job_file: netbox-housekeeping.sh
+
+
+# NetBox web server configuration
+#################################
+
+# Web server fully-qualified domain name (FQDN)
+nb_install_web_server_domain: "{{ nb_install_netbox_domain }}"
+
+# Web server TLS certificate path
+nb_install_web_server_tls_cert_path: "/etc/ssl/certs/netbox.crt"
+
+# Web server TLS certificate key path:
+nb_install_web_server_tls_cert_key_path: "/etc/ssl/private/netbox.key"
+
 ...
